@@ -1,0 +1,4 @@
+# Display grasps given
+moveit_msgs/Grasp[] grasps
+---
+bool success
