@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(agni_grasp_viewer)
+project(grasp_viewer)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -7,6 +7,8 @@ project(agni_grasp_viewer)
 find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
   moveit_msgs
+  moveit_core
+  moveit_ros_planning
   roscpp
   urdf
   visualization_msgs
@@ -104,9 +106,9 @@ generate_messages(
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-#  INCLUDE_DIRS include
-#  LIBRARIES agni_grasp_viewer
-#  CATKIN_DEPENDS geometry_msgs moveit_msgs roscpp urdf visualization_msgs
+   INCLUDE_DIRS include
+   LIBRARIES grasp_viewer
+   CATKIN_DEPENDS geometry_msgs moveit_msgs moveit_core moveit_ros_planning roscpp urdf visualization_msgs
 #  DEPENDS system_lib
 )
 
@@ -114,34 +116,17 @@ catkin_package(
 ## Build ##
 ###########
 
-## Specify additional locations of header files
-## Your package locations should be listed before other locations
-# include_directories(include)
 include_directories(
-  ${catkin_INCLUDE_DIRS}
+  ${catkin_INCLUDE_DIRS} include
 )
 
-## Declare a C++ library
-# add_library(agni_grasp_viewer
-#   src/${PROJECT_NAME}/agni_grasp_viewer.cpp
-# )
+add_library(grasp_viewer src/grasp_viewer.cpp)
+add_dependencies(grasp_viewer ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(grasp_viewer ${catkin_LIBRARIES})
 
-## Add cmake target dependencies of the library
-## as an example, code may need to be generated before libraries
-## either from message generation or dynamic reconfigure
-# add_dependencies(agni_grasp_viewer ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-
-## Declare a C++ executable
 add_executable(grasp_viewer_service src/grasp_viewer_service.cpp)
-
-## Add cmake target dependencies of the executable
-## same as for the library above
 add_dependencies(grasp_viewer_service ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-
-## Specify libraries to link a library or executable target against
-target_link_libraries(grasp_viewer_service
-   ${catkin_LIBRARIES}
-)
+target_link_libraries(grasp_viewer_service grasp_viewer ${catkin_LIBRARIES})
 
 #############
 ## Install ##
@@ -158,18 +143,18 @@ target_link_libraries(grasp_viewer_service
 # )
 
 # Mark executables and/or libraries for installation
-install(TARGETS grasp_viewer_service
+install(TARGETS grasp_viewer_service grasp_viewer
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
-## Mark cpp header files for installation
-# install(DIRECTORY include/${PROJECT_NAME}/
-#   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
-#   FILES_MATCHING PATTERN "*.h"
-#   PATTERN ".svn" EXCLUDE
-# )
+# Mark cpp header files for installation
+install(DIRECTORY include/${PROJECT_NAME}/
+  DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
+  FILES_MATCHING PATTERN "*.h"
+  PATTERN ".svn" EXCLUDE
+)
 
 ## Mark other files for installation (e.g. launch and bag files, etc.)
 # install(FILES
@@ -183,7 +168,7 @@ install(TARGETS grasp_viewer_service
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_agni_grasp_viewer.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_grasp_viewer.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()
