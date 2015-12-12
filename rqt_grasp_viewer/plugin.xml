@@ -1,0 +1,17 @@
+<library path="src">
+  <class name="GraspViewerGUI" type="rqt_grasp_viewer.grasp_viewer_gui.GraspViewerGUI" base_class_type="rqt_gui_py::Plugin">
+    <description>
+      A Python GUI plugin to select grasps to view in rviz
+    </description>
+    <qtgui>
+      <group>
+        <label>Robot</label>
+        <icon type="theme">folder</icon>
+        <statustip>Plugins related to specific robots.</statustip>
+      </group>
+      <label>Grasp Viewer</label>
+      <icon type="theme">task-past-due</icon>
+      <statustip>A Python GUI plugin to select grasps to view in rviz</statustip>
+    </qtgui>
+  </class>
+</library>
