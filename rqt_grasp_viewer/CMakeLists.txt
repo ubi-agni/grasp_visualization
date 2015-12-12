@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(rqt_grasp_viewer)
 
-find_package(catkin REQUIRED grasp_viewer)
+find_package(catkin REQUIRED COMPONENTS grasp_viewer)
 catkin_package()
 catkin_python_setup()
 
