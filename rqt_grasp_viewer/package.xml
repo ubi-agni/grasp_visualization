@@ -14,7 +14,7 @@
   <run_depend>rqt_gui</run_depend>
   <run_depend>rqt_gui_py</run_depend>
   <run_depend>grasp_viewer</run_depend>
-  <run_depend>grasping_msg</run_depend>
+  <run_depend>grasping_msgs</run_depend>
 
   <export>
     <rqt_gui plugin="${prefix}/plugin.xml"/>
