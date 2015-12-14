@@ -117,7 +117,7 @@ catkin_package(
 ###########
 
 include_directories(
-  ${catkin_INCLUDE_DIRS} include
+  include ${catkin_INCLUDE_DIRS}
 )
 
 add_library(grasp_viewer src/grasp_viewer.cpp)

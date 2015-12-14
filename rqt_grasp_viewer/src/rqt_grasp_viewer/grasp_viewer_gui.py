@@ -113,15 +113,15 @@ class GraspViewerGUI(Plugin):
         fm = self._filemodel
         for i, obj in enumerate(self.objs):
             for j, grasp in enumerate(obj.grasps):
-                item_id = QStandardItem(i)
+                item_id = QStandardItem(str(i))
                 item_id.setEditable(False)
                 item_obj = QStandardItem(obj.object.name)
                 item_obj.setEditable(False)
-                idem_grasp_id = QStandardItem(j)
+                idem_grasp_id = QStandardItem(str(j))
                 idem_grasp_id.setEditable(False)
                 item_grasp = QStandardItem(grasp.id)
                 item_grasp.setEditable(False)
-                item_grasp_quality = QStandardItem(grasp.grasp_quality)
+                item_grasp_quality = QStandardItem(str(grasp.grasp_quality))
                 item_grasp_quality.setEditable(False)
                 fm.appendRow([item_id, item_obj, idem_grasp_id, item_grasp, item_grasp_quality])
         self._table_view.resizeColumnsToContents()

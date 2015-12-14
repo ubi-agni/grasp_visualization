@@ -39,9 +39,20 @@ bool display_grasp(grasp_viewer::DisplayGrasps::Request  &req,
 int main(int argc, char **argv)
 {
   ros::init(argc, argv, "grasp_viz");
-  ros::NodeHandle n;
+  ros::NodeHandle n, n_tilde("~");
 
-  grasp_view = new GraspViewer("");
+  std::string grasp_frame = "grasp_frame";
+  if (n_tilde.hasParam("grasp_frame"))
+  {
+    n_tilde.getParam("grasp_frame", grasp_frame);
+    ROS_INFO_STREAM("Using grasp frame named " << grasp_frame);
+  }
+  else
+  {
+    ROS_INFO_STREAM("Did not find ~grasp_frame" << grasp_frame);
+  }
+
+  grasp_view = new GraspViewer(n.getNamespace(), grasp_frame);
   if(!grasp_view->init())
   {
     delete grasp_view;

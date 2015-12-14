@@ -4,13 +4,15 @@
 #include <visualization_msgs/Marker.h>
 #include <moveit/robot_model_loader/robot_model_loader.h>
 #include <moveit/robot_model/robot_model.h>
+#include <moveit/robot_model/joint_model_group.h>
 #include "grasp_viewer/grasp_viewer.h"
 #include <Eigen/Eigen>
 #include <eigen_conversions/eigen_msg.h>
 
-GraspViewer::GraspViewer(const std::string ns)
+GraspViewer::GraspViewer(const std::string ns, const std::string grasp_frame)
 {
   ns_ = ns;
+  grasp_frame_ = grasp_frame;
 }
 
 bool GraspViewer::init()
@@ -34,7 +36,15 @@ bool GraspViewer::createGraspMarker(const std::string ee_name, const moveit_msgs
   // check existence of end-effector
   if(!robot_state_->getRobotModel()->hasEndEffector(ee_name))
   { 
-    ROS_WARN("This end-effector is not part of the model" );
+    ROS_WARN_STREAM("End-effector "<< ee_name <<" is not part of the model" );
+    const std::vector< const moveit::core::JointModelGroup *> ee_list = robot_state_->getRobotModel()->getEndEffectors();
+    /*
+    ROS_WARN("Possible end-effectors are:");
+    for(size_t i = 0; i < ee_list.size(); ++i)
+    {
+      ROS_WARN_STREAM("  "<< ee_list[i]->getName()); 
+    }
+    */
     return false;
   }
   // retrieve joint_names from grasp posture and check if part of end-effector
@@ -91,9 +101,10 @@ bool GraspViewer::createGraspMarker(const std::string ee_name, const moveit_msgs
   
   robot_state_->getRobotMarkers(marker_array,link_names, color, "grasp", ros::Duration(0));
   Eigen::Affine3d tf_link_to_root;
-  std::string grasp_link = "grasp_frame";
+  std::string grasp_link = grasp_frame_;
   // check if grasp_frame exist
-  if(!robot_state_->getRobotModel()->getEndEffector(ee_name)->hasLinkModel(grasp_link))
+  //if(!robot_state_->getRobotModel()->getEndEffector(ee_name)->hasLinkModel(grasp_link))
+  if(!robot_state_->getRobotModel()->hasLinkModel(grasp_link))
   {
     // get commont root 
     grasp_link = robot_state_->getRobotModel()->getEndEffector(ee_name)->getCommonRoot()->getChildLinkModel()->getName();
