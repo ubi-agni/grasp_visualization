@@ -31,7 +31,9 @@ bool GraspViewer::init()
 }
 
 
-bool GraspViewer::createGraspMarker(const std::string ee_name, const moveit_msgs::Grasp &grasp, visualization_msgs::MarkerArray &marker_array)
+bool GraspViewer::createGraspMarker(const std::string ee_name, const moveit_msgs::Grasp &grasp,
+                                    visualization_msgs::MarkerArray &marker_array,
+                                    std_msgs::ColorRGBA color)
 {
   // check existence of end-effector
   if(!robot_state_->getRobotModel()->hasEndEffector(ee_name))
@@ -78,9 +80,6 @@ bool GraspViewer::createGraspMarker(const std::string ee_name, const moveit_msgs
   // get the markers
   //link_names.clear();
   //link_names.push_back("palm");
-  std_msgs::ColorRGBA color;
-  color.a = 0.3;
-  color.b = 1.0;
   
   size_t cur_num = marker_array.markers.size();
 
@@ -99,7 +98,16 @@ bool GraspViewer::createGraspMarker(const std::string ee_name, const moveit_msgs
   marker.id = ++cur_num;
   marker_array.markers.push_back(marker);
   
-  robot_state_->getRobotMarkers(marker_array,link_names, color, "grasp", ros::Duration(0));
+  std_msgs::ColorRGBA local_color;
+  if (color.a == 0.0)
+  {
+    local_color.a = 0.3;
+    local_color.b = 1.0;
+  }
+  else
+    local_color = color;
+  
+  robot_state_->getRobotMarkers(marker_array,link_names, local_color, "grasp", ros::Duration(0));
   Eigen::Affine3d tf_link_to_root;
   std::string grasp_link = grasp_frame_;
   // check if grasp_frame exist

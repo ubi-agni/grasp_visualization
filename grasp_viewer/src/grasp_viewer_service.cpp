@@ -26,7 +26,7 @@ bool display_grasp(grasp_viewer::DisplayGrasps::Request  &req,
     else
       ee_name = "right_hand";
     
-    if(!grasp_view->createGraspMarker(ee_name, grasps[i], marker_array))
+    if(!grasp_view->createGraspMarker(ee_name, grasps[i], marker_array, req.color))
     {
       ROS_WARN("Failed to create grasp marker for grasp %d.", i);
     }

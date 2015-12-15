@@ -1,4 +1,5 @@
 # Display grasps given
 moveit_msgs/Grasp[] grasps
+std_msgs/ColorRGBA  color
 ---
 bool success

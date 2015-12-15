@@ -5,6 +5,7 @@ project(grasp_viewer)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
+  std_msgs
   geometry_msgs
   moveit_msgs
   moveit_core
@@ -71,6 +72,7 @@ add_service_files(
 ## Generate added messages and services with any dependencies listed here
 generate_messages(
    DEPENDENCIES
+   std_msgs
    geometry_msgs
    moveit_msgs
    visualization_msgs
@@ -108,7 +110,7 @@ generate_messages(
 catkin_package(
    INCLUDE_DIRS include
    LIBRARIES grasp_viewer
-   CATKIN_DEPENDS geometry_msgs moveit_msgs moveit_core moveit_ros_planning roscpp urdf visualization_msgs
+   CATKIN_DEPENDS std_msgs geometry_msgs moveit_msgs moveit_core moveit_ros_planning roscpp urdf visualization_msgs
 #  DEPENDS system_lib
 )
 
