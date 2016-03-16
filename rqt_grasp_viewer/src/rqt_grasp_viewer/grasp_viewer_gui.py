@@ -36,7 +36,7 @@ from python_qt_binding.QtCore import QSize
 from QtCore import Qt, QThread, SIGNAL, QObject
 from QtGui import QWidget, QStandardItemModel, QStandardItem, QTableView, QCheckBox, QFileDialog, QMessageBox, QPushButton, QFrame, QHBoxLayout, QVBoxLayout
 
-from grasping_msgs.msg import FindGraspableObjectsActionResult
+from grasping_msgs.msg import GraspPlanningActionResult
 
 from grasp_viewer.srv import DisplayGrasps, DisplayGraspsRequest
 
@@ -95,15 +95,15 @@ class GraspViewerGUI(Plugin):
         """
         Sets up an action client to communicate with the trajectory controller
         """
-        self._grasp_sub = rospy.Subscriber("/grasp_manager/result", FindGraspableObjectsActionResult, self.graspable_result_cb)
+        self._grasp_sub = rospy.Subscriber("/grasp_manager/result", GraspPlanningActionResult, self.graspable_result_cb)
     
     def graspable_result_cb(self, msg):
         result = msg.result
-        if len(result.objects) > 0:
+        if len(result.grasps) > 0:
             fm = self._filemodel
             fm.clear()
             fm.setHorizontalHeaderLabels(self._default_labels)
-            self.objs = result.objects
+            self.grasps = result.grasps
             self.populate_table()
 
     def populate_table(self):
@@ -111,19 +111,19 @@ class GraspViewerGUI(Plugin):
         update table
         """
         fm = self._filemodel
-        for i, obj in enumerate(self.objs):
-            for j, grasp in enumerate(obj.grasps):
-                item_id = QStandardItem(str(i))
-                item_id.setEditable(False)
-                item_obj = QStandardItem(obj.object.name)
-                item_obj.setEditable(False)
-                idem_grasp_id = QStandardItem(str(j))
-                idem_grasp_id.setEditable(False)
-                item_grasp = QStandardItem(grasp.id)
-                item_grasp.setEditable(False)
-                item_grasp_quality = QStandardItem(str(grasp.grasp_quality))
-                item_grasp_quality.setEditable(False)
-                fm.appendRow([item_id, item_obj, idem_grasp_id, item_grasp, item_grasp_quality])
+        i = 0
+        for j, grasp in enumerate(self.grasps):
+            item_id = QStandardItem(str(i))
+            item_id.setEditable(False)
+            item_obj = QStandardItem("unknown")
+            item_obj.setEditable(False)
+            idem_grasp_id = QStandardItem(str(j))
+            idem_grasp_id.setEditable(False)
+            item_grasp = QStandardItem(grasp.id)
+            item_grasp.setEditable(False)
+            item_grasp_quality = QStandardItem(str(grasp.grasp_quality))
+            item_grasp_quality.setEditable(False)
+            fm.appendRow([item_id, item_obj, idem_grasp_id, item_grasp, item_grasp_quality])
         self._table_view.resizeColumnsToContents()
         #fm = self._filemodel[group_name]
         #item_idx = fm.index(idx, 0)
@@ -146,7 +146,7 @@ class GraspViewerGUI(Plugin):
                 obj_id = int(fm.data(obj_idx))
                 grasp_idx = fm.index(it.row(), 2)
                 grasp_id = int(fm.data(grasp_idx))
-                req.grasps.append(self.objs[obj_id].grasps[grasp_id])
+                req.grasps.append(self.grasps[grasp_id])
                 #print "selected item index found at ", obj_id, grasp_id
             self._grasp_viz_client(req)
     
