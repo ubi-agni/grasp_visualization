@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# 
+#
 # derived from sr_gui_controller_tuner
 #   original Authors Shadow Robot Team
 #
@@ -34,11 +34,13 @@ from python_qt_binding import loadUi
 from python_qt_binding.QtCore import QSize
 
 from QtCore import Qt, QThread, SIGNAL, QObject
-from QtGui import QWidget, QStandardItemModel, QStandardItem, QTableView, QCheckBox, QFileDialog, QMessageBox, QPushButton, QFrame, QHBoxLayout, QVBoxLayout
+from QtGui import QWidget, QStandardItemModel, QStandardItem,\
+    QTableView, QCheckBox, QFileDialog, QMessageBox, QPushButton, QFrame, QHBoxLayout, QVBoxLayout
 
 from grasping_msgs.msg import GraspPlanningActionResult
 
 from grasp_viewer.srv import DisplayGrasps, DisplayGraspsRequest
+
 
 class GraspViewerGUI(Plugin):
     """
@@ -51,32 +53,29 @@ class GraspViewerGUI(Plugin):
 
         self._widget = QWidget()
 
-        
         ui_file = os.path.join(rospkg.RosPack().get_path('rqt_grasp_viewer'), 'ui', 'RqtGraspViewer.ui')
         loadUi(ui_file, self._widget)
         self._widget.setObjectName('RqtGraspViewerUi')
         context.add_widget(self._widget)
-                
+
         main_layout = QHBoxLayout()
         self._default_labels = ["obj_id", "object", "grasp_id", "grasp", "quality"]
         self._filemodel = QStandardItemModel(0, 5)
         self._filemodel.setHorizontalHeaderLabels(self._default_labels)
-        
-        
+
         self._table_view = QTableView()
         self._table_view.setModel(self._filemodel)
         self._table_view.resizeColumnsToContents()
-        
+
         main_layout.addWidget(self._table_view)
         self._widget.scrollarea.setLayout(main_layout)
-        
+
         self.init_services()
         self.init_subscribers()
-        
+
         # self._table_view.clicked.connect(self.on_table_view_clicked)
         self._table_view.selectionModel().selectionChanged.connect(self.on_table_view_select)
         #self._widget.treeWidget.itemClicked.connect(self.on_posture_clicked)
-
 
     def init_services(self):
         """
@@ -87,7 +86,7 @@ class GraspViewerGUI(Plugin):
         try:
             rospy.wait_for_service(service_name)
             self._grasp_viz_client = rospy.ServiceProxy(service_name, DisplayGrasps)
-            rospy.loginfo("Found %s", service_name)            
+            rospy.loginfo("Found %s", service_name)
         except rospy.ROSException:
             rospy.logerr("%s did not show up. Giving up", service_name)
 
@@ -95,8 +94,9 @@ class GraspViewerGUI(Plugin):
         """
         Sets up an action client to communicate with the trajectory controller
         """
-        self._grasp_sub = rospy.Subscriber("/grasp_manager/result", GraspPlanningActionResult, self.graspable_result_cb)
-    
+        self._grasp_sub = rospy.Subscriber("/grasp_manager/result", GraspPlanningActionResult,
+                                           self.graspable_result_cb)
+
     def graspable_result_cb(self, msg):
         result = msg.result
         if len(result.grasps) > 0:
@@ -128,13 +128,13 @@ class GraspViewerGUI(Plugin):
         #fm = self._filemodel[group_name]
         #item_idx = fm.index(idx, 0)
         #fm.setData(item_idx, str(time_from_start))
-        
+
     def on_table_view_clicked(self, index):
-      
+
         items = self._table_view.selectedIndexes()
         for it in items:
             print 'selected item index found at %s' % it.row()
-    
+
     def on_table_view_select(self, selected, deselected):
         fm = self._filemodel
         items = self._table_view.selectedIndexes()
@@ -152,8 +152,7 @@ class GraspViewerGUI(Plugin):
                 req.grasps.append(self.grasps[grasp_id])
                 #print "selected item index found at ", obj_id, grasp_id
             self._grasp_viz_client(req)
-    
-    
+
     #########
     # Default methods for the rqtgui plugins
 
