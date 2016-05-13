@@ -19,7 +19,7 @@ bool display_grasp(grasp_viewer::DisplayGrasps::Request  &req,
   visualization_msgs::MarkerArray marker_array;
   
   std::string ee_name;
-  for (size_t i=0; i < std::min(4, (int)grasps.size()); ++i)
+  for (size_t i=0; i < std::min(5, (int)grasps.size()); ++i)
   {
     if (grasps[i].id.find("LeftArm") != std::string::npos) 
       ee_name = "left_hand";

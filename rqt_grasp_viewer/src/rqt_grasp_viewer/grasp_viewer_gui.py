@@ -139,6 +139,9 @@ class GraspViewerGUI(Plugin):
         fm = self._filemodel
         items = self._table_view.selectedIndexes()
         if len(items) > 0:
+            if len(items) > 5:
+                rospy.logwarn("More than 5 items selected, \
+                              but grasp viewer can only display 5 grasps at the same time")
             req = DisplayGraspsRequest()
             for it in items:
                 row = it.row()
