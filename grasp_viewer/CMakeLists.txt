@@ -122,6 +122,8 @@ include_directories(
   include ${catkin_INCLUDE_DIRS}
 )
 
+add_definitions(-std=c++11)
+
 add_library(grasp_viewer src/grasp_viewer.cpp)
 add_dependencies(grasp_viewer ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(grasp_viewer ${catkin_LIBRARIES})
