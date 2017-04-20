@@ -29,13 +29,12 @@ import os
 from copy import deepcopy
 
 from qt_gui.plugin import Plugin
-from python_qt_binding import loadUi
+from PyQt5.uic import loadUi
 
-from python_qt_binding.QtCore import QSize
-
-from QtCore import Qt, QThread, SIGNAL, QObject
-from QtGui import QWidget, QStandardItemModel, QStandardItem,\
-    QTableView, QCheckBox, QFileDialog, QMessageBox, QPushButton, QFrame, QHBoxLayout, QVBoxLayout
+from QtCore import Qt, QThread, pyqtSignal, QObject
+from QtGui import QStandardItemModel, QStandardItem
+from QtWidgets import QWidget, QTableView, QCheckBox, QFileDialog, \
+     QMessageBox, QPushButton, QFrame, QHBoxLayout, QVBoxLayout
 
 from grasping_msgs.msg import GraspPlanningActionResult
 
