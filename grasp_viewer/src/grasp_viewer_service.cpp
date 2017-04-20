@@ -3,11 +3,23 @@
 #include "ros/ros.h"
 #include "moveit_msgs/Grasp.h"
 #include "visualization_msgs/MarkerArray.h"
+#include "visualization_msgs/Marker.h"
 #include "grasp_viewer/DisplayGrasps.h"
 #include "grasp_viewer/grasp_viewer.h"
 
 GraspViewer *grasp_view;
 ros::Publisher pub;
+
+void delete_all_grasps()
+{
+  visualization_msgs::MarkerArray marker_array;
+  visualization_msgs::Marker marker;
+  marker.action = visualization_msgs::Marker::DELETEALL;
+  marker.id = 1;
+  marker_array.markers.push_back(marker);
+  pub.publish(marker_array);
+  return;
+}
 
 
 bool display_grasp(grasp_viewer::DisplayGrasps::Request  &req,
@@ -18,6 +30,10 @@ bool display_grasp(grasp_viewer::DisplayGrasps::Request  &req,
   const std::vector<moveit_msgs::Grasp> grasps = req.grasps;
   visualization_msgs::MarkerArray marker_array;
   
+  // clear previously displayed markers
+  delete_all_grasps();
+  
+  // display new markers
   std::string ee_name;
   for (size_t i=0; i < std::min(5, (int)grasps.size()); ++i)
   {
