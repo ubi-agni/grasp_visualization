@@ -6,6 +6,7 @@
 #include <string>
 #include <moveit_msgs/Grasp.h>
 #include <visualization_msgs/MarkerArray.h>
+#include <geometry_msgs/PoseStamped.h>
 #include <moveit/robot_state/robot_state.h>
 #include <std_msgs/ColorRGBA.h>
 
@@ -17,9 +18,9 @@ class GraspViewer
       bool createGraspMarker(const std::string ee_name, const moveit_msgs::Grasp &grasp,
                              visualization_msgs::MarkerArray &marker_array,
                              std_msgs::ColorRGBA color);
-      bool getGraspMarkerMesh(const moveit_msgs::Grasp &grasp, visualization_msgs::MarkerArray &marker_array);
-      
+
   private:
+      void createGraspFrameMarker(visualization_msgs::MarkerArray &marker_array, const geometry_msgs::PoseStamped &grasp_pose_stamped);
       std::string ns_;
       std::string grasp_frame_;
       std::string root_link_;

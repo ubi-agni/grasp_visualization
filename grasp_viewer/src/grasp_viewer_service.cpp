@@ -9,6 +9,10 @@
 
 GraspViewer *grasp_view;
 ros::Publisher pub;
+std::string left_arm_name;
+std::string right_arm_name;
+std::string left_hand_ee;
+std::string right_hand_ee;
 
 void delete_all_grasps()
 {
@@ -37,11 +41,18 @@ bool display_grasp(grasp_viewer::DisplayGrasps::Request  &req,
   std::string ee_name;
   for (size_t i=0; i < std::min(5, (int)grasps.size()); ++i)
   {
-    if (grasps[i].id.find("LeftArm") != std::string::npos) 
-      ee_name = "left_hand";
-    else
-      ee_name = "right_hand";
-    
+    // In grasp id, find which ee_name depending on which arm name
+    if (grasps[i].id.find(left_arm_name) != std::string::npos) 
+      ee_name = left_hand_ee;
+    else {
+      if (grasps[i].id.find(right_arm_name) != std::string::npos) 
+        ee_name = right_hand_ee;
+      else
+      {
+        ROS_WARN("No indication about arm name in grasp.id, no end-effector can be selected for grasp %zd.", i);
+        return false;
+      }
+    }
     if(!grasp_view->createGraspMarker(ee_name, grasps[i], marker_array, req.color))
     {
       ROS_WARN("Failed to create grasp marker for grasp %zd.", i);
@@ -67,6 +78,14 @@ int main(int argc, char **argv)
   {
     ROS_INFO_STREAM("Did not find ~grasp_frame" << grasp_frame);
   }
+  
+  // get arm and hand names
+  n_tilde.param<std::string>("left_arm_name", left_arm_name, "LeftArm");
+  ROS_INFO_STREAM("Using left_arm named " << left_arm_name);
+  n_tilde.param<std::string>("left_hand_ee", left_hand_ee, "left_hand");
+  ROS_INFO_STREAM("Using left_hand_ee named " << left_hand_ee);
+  n_tilde.param<std::string>("right_hand_ee", right_hand_ee, "right_hand");
+  ROS_INFO_STREAM("Using right_hand_ee named " << right_hand_ee);
 
   grasp_view = new GraspViewer(n.getNamespace(), grasp_frame);
   if(!grasp_view->init())
