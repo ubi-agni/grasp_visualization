@@ -51,7 +51,46 @@ void GraspViewer::createGraspFrameMarker(visualization_msgs::MarkerArray &marker
   marker.id = marker_array.markers.size() + 1;
   marker_array.markers.push_back(marker);
 }
+
+void GraspViewer::createDefaultGraspMarker(visualization_msgs::MarkerArray &marker_array, const geometry_msgs::PoseStamped &grasp_pose_stamped)
+{
+  visualization_msgs::Marker marker;
+  marker.pose = grasp_pose_stamped.pose;
+  marker.type = visualization_msgs::Marker::LINE_STRIP;
+  marker.header.frame_id = grasp_pose_stamped.header.frame_id;
+  marker.ns = "default_grasp";
   
+  
+  marker.color.r = 0.0;
+  marker.color.g = 0.0;
+  marker.color.b = 1.0;
+  marker.color.a = 1.0;
+  marker.scale.x = 0.01;
+  
+  // finger line
+  geometry_msgs::Point p;
+  p.x=0.0;
+  p.y=0.05;
+  p.z=0.05;
+  marker.points.push_back(p);
+  p.z=0.025;
+  marker.points.push_back(p);
+  p.y=0;
+  p.z=0;
+  marker.points.push_back(p);
+  // palm line
+  p.y=-0.1;
+  marker.points.push_back(p);
+  // thumb line
+  p.z=0.025;
+  marker.points.push_back(p);
+  p.y=-0.075;
+  p.z=0.05;
+  marker.points.push_back(p);
+  
+  marker.id = marker_array.markers.size() + 1;
+  marker_array.markers.push_back(marker);
+}
 
 bool GraspViewer::createGraspMarker(const std::string ee_name, const moveit_msgs::Grasp &grasp,
                                     visualization_msgs::MarkerArray &marker_array,
@@ -76,6 +115,8 @@ bool GraspViewer::createGraspMarker(const std::string ee_name, const moveit_msgs
   { 
     ROS_WARN_STREAM("End-effector "<< ee_name <<" is not part of the model" );
     const std::vector< const moveit::core::JointModelGroup *> ee_list = robot_state_->getRobotModel()->getEndEffectors();
+    // add an default gripper drawing
+    createDefaultGraspMarker(marker_array, grasp.grasp_pose);
     /*
     ROS_WARN("Possible end-effectors are:");
     for(size_t i = 0; i < ee_list.size(); ++i)

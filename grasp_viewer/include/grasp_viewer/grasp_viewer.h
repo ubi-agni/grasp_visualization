@@ -21,6 +21,7 @@ class GraspViewer
 
   private:
       void createGraspFrameMarker(visualization_msgs::MarkerArray &marker_array, const geometry_msgs::PoseStamped &grasp_pose_stamped);
+      void createDefaultGraspMarker(visualization_msgs::MarkerArray &marker_array, const geometry_msgs::PoseStamped &grasp_pose_stamped);
       std::string ns_;
       std::string grasp_frame_;
       std::string root_link_;
