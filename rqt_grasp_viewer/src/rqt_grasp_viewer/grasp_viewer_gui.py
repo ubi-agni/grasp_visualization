@@ -150,7 +150,10 @@ class GraspViewerGUI(Plugin):
                 grasp_id = int(fm.data(grasp_idx))
                 req.grasps.append(self.grasps[grasp_id])
                 #print "selected item index found at ", obj_id, grasp_id
-            self._grasp_viz_client(req)
+            try:
+                self._grasp_viz_client(req)
+            except Exception as e:
+                print e
 
     #########
     # Default methods for the rqtgui plugins
