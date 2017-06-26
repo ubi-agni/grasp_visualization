@@ -36,7 +36,7 @@ from QtGui import QStandardItemModel, QStandardItem
 from QtWidgets import QWidget, QTableView, QCheckBox, QFileDialog, \
      QMessageBox, QPushButton, QFrame, QHBoxLayout, QVBoxLayout
 
-from grasping_msgs.msg import GraspPlanningActionResult
+from grasping_msgs.msg import GraspPlanningActionResult, GenerateGraspsActionResult
 
 from grasp_viewer.srv import DisplayGrasps, DisplayGraspsRequest
 
@@ -94,6 +94,8 @@ class GraspViewerGUI(Plugin):
         Sets up an action client to communicate with the trajectory controller
         """
         self._grasp_sub = rospy.Subscriber("/grasp_manager/result", GraspPlanningActionResult,
+                                           self.graspable_result_cb)
+        self._grasp_sub2 = rospy.Subscriber("/grasp_provider/result", GenerateGraspsActionResult,
                                            self.graspable_result_cb)
 
     def graspable_result_cb(self, msg):
