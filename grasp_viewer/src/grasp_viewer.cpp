@@ -10,10 +10,9 @@
 #include <Eigen/Eigen>
 #include <eigen_conversions/eigen_msg.h>
 
-GraspViewer::GraspViewer(const std::string ns, const std::string grasp_frame)
+GraspViewer::GraspViewer(const std::string ns)
 {
   ns_ = ns;
-  grasp_frame_ = grasp_frame;
 }
 
 bool GraspViewer::init()
@@ -94,7 +93,8 @@ void GraspViewer::createDefaultGraspMarker(visualization_msgs::MarkerArray &mark
 
 bool GraspViewer::createGraspMarker(const std::string ee_name, const moveit_msgs::Grasp &grasp,
                                     visualization_msgs::MarkerArray &marker_array,
-                                    std_msgs::ColorRGBA color)
+                                    std_msgs::ColorRGBA color,
+                                    const std::string grasp_frame)
 {
   // add an arrow (minimal display even if grasp marker for ee cannot be retrieved)
   createGraspFrameMarker(marker_array, grasp.grasp_pose);
@@ -160,7 +160,7 @@ bool GraspViewer::createGraspMarker(const std::string ee_name, const moveit_msgs
     
     // transform markers to correct frame
     Eigen::Affine3d tf_link_to_root;
-    std::string grasp_link = grasp_frame_;
+    std::string grasp_link = grasp_frame;
     // check if grasp_frame exist
     //if(!robot_state_->getRobotModel()->getEndEffector(ee_name)->hasLinkModel(grasp_link))
     if(!robot_state_->getRobotModel()->hasLinkModel(grasp_link))

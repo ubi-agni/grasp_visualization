@@ -13,17 +13,17 @@
 class GraspViewer
 {
   public:
-      GraspViewer(const std::string ns, const std::string grasp_frame="grasp_frame");
+      GraspViewer(const std::string ns);
       bool init();
       bool createGraspMarker(const std::string ee_name, const moveit_msgs::Grasp &grasp,
                              visualization_msgs::MarkerArray &marker_array,
-                             std_msgs::ColorRGBA color);
+                             std_msgs::ColorRGBA color,
+                             const std::string grasp_frame="");
 
   private:
       void createGraspFrameMarker(visualization_msgs::MarkerArray &marker_array, const geometry_msgs::PoseStamped &grasp_pose_stamped);
       void createDefaultGraspMarker(visualization_msgs::MarkerArray &marker_array, const geometry_msgs::PoseStamped &grasp_pose_stamped);
       std::string ns_;
-      std::string grasp_frame_;
       std::string root_link_;
       moveit::core::RobotStatePtr robot_state_;
 };
