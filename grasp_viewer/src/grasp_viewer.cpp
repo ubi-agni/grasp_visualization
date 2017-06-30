@@ -165,9 +165,10 @@ bool GraspViewer::createGraspMarker(const std::string ee_name, const moveit_msgs
     //if(!robot_state_->getRobotModel()->getEndEffector(ee_name)->hasLinkModel(grasp_link))
     if(!robot_state_->getRobotModel()->hasLinkModel(grasp_link))
     {
-      // get commont root 
-      grasp_link = robot_state_->getRobotModel()->getEndEffector(ee_name)->getCommonRoot()->getChildLinkModel()->getName();
-      ROS_INFO_STREAM("using '" << grasp_link << "' as grasp link");
+      // get common root 
+      //grasp_link = robot_state_->getRobotModel()->getEndEffector(ee_name)->getCommonRoot()->getChildLinkModel()->getName();
+      grasp_link = robot_state_->getRobotModel()->getEndEffector(ee_name)->getEndEffectorParentGroup().second;
+      ROS_DEBUG_STREAM("using '" << grasp_link << "' as grasp link");
       tf_link_to_root = robot_state_->getGlobalLinkTransform(grasp_link).inverse();
     }
     else
