@@ -13,6 +13,7 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   urdf
   visualization_msgs
+  eigen_conversions
   genmsg message_generation
 )
 
