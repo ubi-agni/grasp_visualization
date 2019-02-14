@@ -117,13 +117,13 @@ bool GraspViewer::createGraspMarker(const std::string ee_name, const moveit_msgs
     const std::vector< const moveit::core::JointModelGroup *> ee_list = robot_state_->getRobotModel()->getEndEffectors();
     // add an default gripper drawing
     createDefaultGraspMarker(marker_array, grasp.grasp_pose);
-    /*
-    ROS_WARN("Possible end-effectors are:");
+    
+    ROS_DEBUG("Possible end-effectors are:");
     for(size_t i = 0; i < ee_list.size(); ++i)
     {
-      ROS_WARN_STREAM("  "<< ee_list[i]->getName()); 
+      ROS_DEBUG_STREAM("  "<< ee_list[i]->getName()); 
     }
-    */
+    
   }
   else
   {
