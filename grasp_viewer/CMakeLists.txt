@@ -12,6 +12,7 @@ find_package(catkin REQUIRED COMPONENTS
   moveit_ros_planning
   roscpp
   urdf
+  eigen_conversions
   visualization_msgs
   genmsg message_generation
 )

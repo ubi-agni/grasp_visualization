@@ -6,7 +6,7 @@
 #include <moveit/robot_model/robot_model.h>
 #include <moveit/robot_model/joint_model_group.h>
 #include "grasp_viewer/grasp_viewer.h"
-#include <Eigen/Eigen>
+#include <Eigen/Geometry>
 #include <eigen_conversions/eigen_msg.h>
 
 GraspViewer::GraspViewer(const std::string ns, const std::string grasp_frame)
